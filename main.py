@@ -1,11 +1,12 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
+import xlsxwriter
 
 page_number = 0;
 finish_page = 1;
 comment_number = 0
-data = list()
+dataset = list()
 
 while page_number < finish_page:
     books_url = "https://www.idefix.com/kategori/Kitap/Edebiyat/grupno=00055?ShowNotForSale=True&Page="+ str(page_number) + ""
@@ -29,11 +30,13 @@ while page_number < finish_page:
         if (len(comments_html) != 0):
             for comment_html in comments_html:
                 comment = comment_html.find(id="reviewBody").get_text()
-                data.append(dict(
-                    book = book_name,
-                    comment = comment
-                    ))
+                data = [book_name, comment]
+                dataset.append(data)
                 comment_number += 1
     page_number += 1
 print("Comment number: "+ str(comment_number))
-print(data)
+
+with xlsxwriter.Workbook('test.xlsx') as workbook:  #generate file test.xlsx
+    worksheet = workbook.add_worksheet()
+    for name, comment in enumerate(dataset):
+        worksheet.write_row(name, 0, comment)
