@@ -3,12 +3,12 @@ import requests
 import pandas as pd
 import xlsxwriter
 
-page_number = 0;
-finish_page = 1;
+page_number = 1;
+finish_page = 40;
 comment_number = 0
 dataset = list()
 
-while page_number < finish_page:
+while page_number <= finish_page:
     books_url = "https://www.idefix.com/kategori/Kitap/Edebiyat/grupno=00055?ShowNotForSale=True&Page="+ str(page_number) + ""
     books_request = requests.get(books_url)
     books_html = BeautifulSoup(books_request.content,"lxml")
